@@ -27,6 +27,9 @@ $(function () {
             case "circle":
                 svgContainer.on("mousedown", circleSetup);
                 break;
+            case "line":
+                svgContainer.on("mousedown", lineSetup);
+                break;
         }
     });
     
@@ -69,6 +72,24 @@ $(function () {
             Math.pow(endPos[0]-startPos[0], 2) + 
             Math.pow(endPos[1]-startPos[1], 2));
         $("#active").attr("r", radius);
+    }
+    
+    function lineSetup() {
+        startPos = d3.mouse(this);
+        svgContainer.append("line")
+                    .attr("x1", startPos[0])
+                    .attr("y1", startPos[1])
+                    .attr("x2", startPos[0])
+                    .attr("y2", startPos[1])
+                    .attr("class", gclass)
+                    .attr("id", "active");
+        svgContainer.on("mousemove", lineDraw);
+    }
+    
+    function lineDraw() {
+        endPos = d3.mouse(this);
+        $("#active").attr("x2", endPos[0])
+                    .attr("y2", endPos[1]);
     }
     
     function dragended() {

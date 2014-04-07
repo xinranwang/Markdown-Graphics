@@ -1,15 +1,39 @@
 $(function () {
     var startPos = [0, 0];
     var endPos = [0, 0];
-    
+
     var pmousePos = [0, 0];
+
     function setpmousePos() {
         pmousePos = d3.mouse(this);
     }
-    
+
     var selectionType = null;
     var selection;
-    
+
+    var controls = {
+        size: 20,
+        nControl: null,
+        sControl: null,
+        wControl: null,
+        eControl: null,
+        nwControl: null,
+        neControl: null,
+        seControl: null,
+        swControl: null,
+        reset: function () {
+            $(".control").remove();
+            this.nControl = null;
+            this.sControl = null;
+            this.wControl = null;
+            this.eControl = null;
+            this.nwControl = null;
+            this.neControl = null;
+            this.seControl = null;
+            this.swControl = null;
+        }
+    }
+
     //        var drag = d3.behavior.drag()
     //                              .on("dragstart", dragstarted)
     //                              .on("drag", dragged)
@@ -18,63 +42,68 @@ $(function () {
     var dragRect = d3.behavior.drag()
         .origin(Object)
         .on("dragstart", setpmousePos)
-        .on("drag", dragRectMove);
-    
+        .on("drag", dragRectMove)
+        .on("dragend", function () {
+            $("#selected").click()
+        });
+
     var dragCircle = d3.behavior.drag()
         .origin(Object)
         .on("dragstart", setpmousePos)
         .on("drag", dragCircleMove);
-    
+
     var dragLine = d3.behavior.drag()
         .origin(Object)
         .on("dragstart", setpmousePos)
         .on("drag", dragLineMove);
-    
+
     function dragRectMove() {
         var pPos = [parseInt(d3.select("#selected").attr("x")),
                     parseInt(d3.select("#selected").attr("y"))];
         var mousePos = d3.mouse(this);
-        
+
         var offsetX = mousePos[0] - pmousePos[0];
         var offsetY = mousePos[1] - pmousePos[1];
-        
-        selection.attr("x", pPos[0]+offsetX)
-            .attr("y", pPos[1]+offsetY);
-        
+
+        selection.attr("x", pPos[0] + offsetX)
+            .attr("y", pPos[1] + offsetY);
+
+        controls.reset();
+
         pmousePos = mousePos;
-//        selection.attr("x", d3.event.x)
-//                 .attr("y", d3.event.y);
+        //        selection.attr("x", d3.event.x)
+        //                 .attr("y", d3.event.y);
     }
-    
+
     function dragCircleMove() {
         var pPos = [parseInt(d3.select("#selected").attr("cx")),
                     parseInt(d3.select("#selected").attr("cy"))];
         var mousePos = d3.mouse(this);
-        
+
         var offsetX = mousePos[0] - pmousePos[0];
         var offsetY = mousePos[1] - pmousePos[1];
-        
-        selection.attr("cx", pPos[0]+offsetX)
-            .attr("cy", pPos[1]+offsetY);
-        
+
+        selection.attr("cx", pPos[0] + offsetX)
+            .attr("cy", pPos[1] + offsetY);
+
         pmousePos = mousePos;
     }
-    
+
     function dragLineMove() {
         var pPos = [parseInt(d3.select("#selected").attr("x1")),
                     parseInt(d3.select("#selected").attr("y1")),
                     parseInt(d3.select("#selected").attr("x2")),
                     parseInt(d3.select("#selected").attr("y2"))];
         var mousePos = d3.mouse(this);
-        
+
         var offsetX = mousePos[0] - pmousePos[0];
         var offsetY = mousePos[1] - pmousePos[1];
-        
-        selection.attr("x1", pPos[0]+offsetX)
-            .attr("y1", pPos[1]+offsetY)
-            .attr("x2", pPos[2]+offsetX)
-            .attr("y2", pPos[3]+offsetY);
-        
+
+        selection.attr("x1", pPos[0] + offsetX)
+            .attr("y1", pPos[1] + offsetY)
+            .attr("x2", pPos[2] + offsetX)
+            .attr("y2", pPos[3] + offsetY);
+
         pmousePos = mousePos;
     }
 
@@ -190,47 +219,112 @@ $(function () {
     }
 
     function dragended() {
-//        $("#active").attr("id", null)
-//            .click(elementSelect)
-//            .mouseover(elementHover);
-        
+        //        $("#active").attr("id", null)
+        //            .click(elementSelect)
+        //            .mouseover(elementHover);
+
         d3.select("#active").attr("id", null)
             .on("click", elementSelect);
         svgContainer.on("mousemove", null)
             .on("mouseup", null)
             .on("mousedown", null);
-            //.on("mousedown", elementUnselect);
+        //.on("mousedown", elementUnselect);
         $("#select-toggle").prop("checked", true);
     }
 
-//    function elementUnselect() {
-//        d3.select("#selected")//.attr("id", null)
-//            .on("click", elementSelect);
-//    }
+    //    function elementUnselect() {
+    //        d3.select("#selected")//.attr("id", null)
+    //            .on("click", elementSelect);
+    //    }
 
     function elementSelect() {
         //elementUnselect();
         $(this).attr("id", "selected")
-            .outside('click', function(e){
-            $(this).attr("id", null);
-        });
+            .outside('click', function (e) {
+                $(this).attr("id", null);
+                controls.reset();
+            });
+
         selection = d3.select("#selected");
-            //.on("click", null);
+        //.on("click", null);
         selectionType = $("#selected").prop("tagName");
-        
+
         switch (selectionType) {
-            case "rect":
-                selection.call(dragRect);
-                break;
-            case "circle":
-                selection.call(dragCircle);
-                break;
-            case "line":
-                selection.call(dragLine);
-                break;
+        case "rect":
+            selection.call(dragRect);
+            controls.nControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) + controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) - controls.size / 2)
+                .attr("width", parseInt(selection.attr("width")) - controls.size)
+                .attr("height", controls.size)
+                .attr("class", "control")
+                .attr("id", "ns-resize");
+
+            controls.sControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) + controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) + parseInt(selection.attr("height")) - controls.size / 2)
+                .attr("width", parseInt(selection.attr("width")) - controls.size)
+                .attr("height", controls.size)
+                .attr("class", "control")
+                .attr("id", "ns-resize");
+
+            controls.wControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) - controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) + controls.size / 2)
+                .attr("width", controls.size)
+                .attr("height", parseInt(selection.attr("height")) - controls.size)
+                .attr("class", "control")
+                .attr("id", "ew-resize");
+
+            controls.eControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) + parseInt(selection.attr("width")) - controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) + controls.size / 2)
+                .attr("width", controls.size)
+                .attr("height", parseInt(selection.attr("height")) - controls.size)
+                .attr("class", "control")
+                .attr("id", "ew-resize");
+
+            controls.nwControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) - controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) - controls.size / 2)
+                .attr("width", controls.size)
+                .attr("height", controls.size)
+                .attr("class", "control")
+                .attr("id", "nwse-resize");
+
+            controls.seControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) + parseInt(selection.attr("width")) - controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) + parseInt(selection.attr("height")) - controls.size / 2)
+                .attr("width", controls.size)
+                .attr("height", controls.size)
+                .attr("class", "control")
+                .attr("id", "nwse-resize");
+
+            controls.neControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) + parseInt(selection.attr("width")) - controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) - controls.size / 2)
+                .attr("width", controls.size)
+                .attr("height", controls.size)
+                .attr("class", "control")
+                .attr("id", "nesw-resize");
+
+            controls.swControl = svgContainer.append("rect")
+                .attr("x", parseInt(selection.attr("x")) - controls.size / 2)
+                .attr("y", parseInt(selection.attr("y")) + parseInt(selection.attr("height")) - controls.size / 2)
+                .attr("width", controls.size)
+                .attr("height", controls.size)
+                .attr("class", "control")
+                .attr("id", "nesw-resize");
+            break;
+        case "circle":
+            selection.call(dragCircle);
+            break;
+        case "line":
+            selection.call(dragLine);
+            break;
         }
-        
-        
+
+
     }
 
 
@@ -238,17 +332,17 @@ $(function () {
 });
 
 // click outside elements
-(function($){
-   $.fn.outside = function(ename, cb){
-      return this.each(function(){
-         var $this = $(this),
-              self = this;
-         $(document.body).bind(ename, function tempo(e){
-             if(e.target !== self && !$.contains(self, e.target)){
-                cb.apply(self, [e]);
-                if(!self.parentNode) $(document.body).unbind(ename, tempo);
-             }
-         });
-      });
-   };
+(function ($) {
+    $.fn.outside = function (ename, cb) {
+        return this.each(function () {
+            var $this = $(this),
+                self = this;
+            $(document.body).bind(ename, function tempo(e) {
+                if (e.target !== self && !$.contains(self, e.target)) {
+                    cb.apply(self, [e]);
+                    if (!self.parentNode) $(document.body).unbind(ename, tempo);
+                }
+            });
+        });
+    };
 }(jQuery));

@@ -193,6 +193,7 @@ $(function () {
 //        $("#active").attr("id", null)
 //            .click(elementSelect)
 //            .mouseover(elementHover);
+        
         d3.select("#active").attr("id", null)
             .on("click", elementSelect);
         svgContainer.on("mousemove", null)
@@ -202,16 +203,19 @@ $(function () {
         $("#select-toggle").prop("checked", true);
     }
 
-    function elementUnselect() {
-        d3.select("#selected").attr("id", null)
-            .on("click", elementSelect);
-    }
+//    function elementUnselect() {
+//        d3.select("#selected")//.attr("id", null)
+//            .on("click", elementSelect);
+//    }
 
     function elementSelect() {
-        elementUnselect();
-        $(this).attr("id", "selected");
-        selection = d3.select("#selected")
-            .on("click", null);
+        //elementUnselect();
+        $(this).attr("id", "selected")
+            .outside('click', function(e){
+            $(this).attr("id", null);
+        });
+        selection = d3.select("#selected");
+            //.on("click", null);
         selectionType = $("#selected").prop("tagName");
         
         switch (selectionType) {
@@ -232,3 +236,19 @@ $(function () {
 
     var domStr = $("svg").clone().html();
 });
+
+// click outside elements
+(function($){
+   $.fn.outside = function(ename, cb){
+      return this.each(function(){
+         var $this = $(this),
+              self = this;
+         $(document.body).bind(ename, function tempo(e){
+             if(e.target !== self && !$.contains(self, e.target)){
+                cb.apply(self, [e]);
+                if(!self.parentNode) $(document.body).unbind(ename, tempo);
+             }
+         });
+      });
+   };
+}(jQuery));

@@ -11,6 +11,15 @@
     stroke-width: 3;
 }
 
+svg > *:hover {
+/*    border: 10px solid;*/
+    stroke: #FF0000;
+}
+
 #active {
     stroke-opacity: 0.5;
+}
+
+#selected {
+    stroke: #00FF00;
 }

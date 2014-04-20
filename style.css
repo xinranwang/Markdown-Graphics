@@ -17,7 +17,7 @@ svg > *:hover {
     stroke-opacity: 0.5;
 }
 
-#active {
+#drawing {
     stroke-opacity: 0.5;
 }
 
@@ -31,7 +31,34 @@ svg > *:hover {
     fill-opacity: 0;
     stroke-opacity: 0;
 }
+
+#boundingbox {
+    fill-opacity: 0;
+    stroke: #000000;
+    stroke-width: 1;
+}
+
 #ns-resize       { cursor: ns-resize; }
 #ew-resize       { cursor: ew-resize; }
 #nesw-resize     { cursor: nesw-resize; }
 #nwse-resize     { cursor: nwse-resize; }
+
+
+#grid {
+    background-size: 30px 30px;
+    background-image:repeating-linear-gradient(0deg, #000, #000 1px, transparent 1px, transparent 30px), repeating-linear-gradient(-90deg, #000, #000 1px, transparent 1px, transparent 30px);
+    height:100%;
+    width:100%;
+    opacity:0.10;
+    position:absolute;
+/*    top:0;*/
+    left:0;
+    z-index:-1;
+}
+
+svg {
+    position:absolute;
+/*    top:0;*/
+    left:0;
+    z-index:0;
+}

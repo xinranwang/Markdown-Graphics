@@ -20,6 +20,8 @@ $(function () {
 
     // add options
     d3.select("#insert-btn").on("click", function () {
+        $("body").append('<button id="view-code">view code</button>');
+        
         d3.select("body").append("form")
             .attr("id", "select-class");
         d3.select("body").append("form")
@@ -31,13 +33,23 @@ $(function () {
         $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle">select<input type="radio" name="shape" value="rect" checked>rect<input type="radio" name="shape" value="circle">circle<input type="radio" name="shape" value="line">line')
             .change(setShape);
 
-
+        
+        
         svgContainer = d3.select("body").append("svg");
 
         var grid = d3.select("body").append("div")
             .attr("id", "grid");
 
         $("#insert-btn").remove();
+        
+        
+        
+        $("#view-code").click(function() {
+            var svgDom = $("svg")[0].outerHTML;
+            //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
+            alert(svgDom);
+        });
+        
 
         setClass();
         setShape();
@@ -179,3 +191,5 @@ function snapMouse(mouse) {
     //console.log(snap);
     return snap;
 }
+
+

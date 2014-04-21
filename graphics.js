@@ -19,7 +19,8 @@ var cursorPos;
 $(function () {
     myCodeMirror = CodeMirror(document.body, {
         mode: "markdown",
-        autoCloseTags: true
+        autoCloseTags: true,
+        autofocus: true
     });
 
 //    // insert button
@@ -32,8 +33,8 @@ $(function () {
 
 function setupCanvas() {
     
-    $("body").append('<button id="view-code">view code</button>');
-    $("body").append('<button id="finish-drawing">done</button>');
+    $("body").append('<button id="view-code">CODE</button>');
+    $("body").append('<button id="finish-drawing">DONE</button>');
 
     d3.select("body").append("div")
         .attr("id", "control-panel");
@@ -42,10 +43,15 @@ function setupCanvas() {
     d3.select("#control-panel").append("form")
         .attr("id", "select-shape");
 
-    $("#select-class").append('<input type="radio" name="gclass" value="regular" checked>regular<input type="radio" name="gclass" value="emphasis">emphasis')
+//    $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass">regular</label><input type="radio" id="emphasis-gclass" name="gclass" value="emphasis"><label for="emphasis-gclass">emphasis</label>')
+//        .change(setClass);
+    
+    $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass"></label><input type="radio" id="emphasis-gclass" name="gclass" value="emphasis"><label for="emphasis-gclass"></label>')
         .change(setClass);
 
-    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle">select<input type="radio" name="shape" value="rect" checked>rect<input type="radio" name="shape" value="circle">circle<input type="radio" name="shape" value="line">line')
+//    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle">select</label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect">rect</label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle">circle</label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line">line</label>')
+//        .change(setShape);
+    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label>')
         .change(setShape);
 
 

@@ -1,13 +1,17 @@
+body {
+/*    background-color: #F4F4F0;*/
+}
+
 .emphasis {
 /*    fill: #eeeeee;*/
     fill-opacity: 0;
-    stroke: #317eac;
+    stroke: #29AAE2;
     stroke-width: 5;
 }
 
 .regular {
     fill-opacity: 0;
-    stroke: #555555;
+    stroke: #59595B;
     stroke-width: 3;
 }
 
@@ -64,10 +68,33 @@ svg {
 }
 
 .CodeMirror {
-  border: 1px solid #eee;
-  height: auto;
+/*  border: 1px solid #eee;*/
+    height: auto;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.8);
 }
 .CodeMirror-scroll {
   overflow-y: hidden;
   overflow-x: auto;
 }
+
+.cm-s-default .cm-variable {color: rgba(0, 0, 0, 0.8);}
+.cm-s-default .cm-variable-2 {color: rgba(0, 0, 0, 0.8);}
+.cm-s-default .cm-variable-3 {color: rgba(0, 0, 0, 0.8);}
+.cm-s-default .cm-comment {color: rgba(0, 0, 0, 0.8);}
+.cm-s-default .cm-header {color: #29AAE2;}
+.cm-s-default .cm-builtin {color: #29AAE2;}
+.cm-s-default .cm-tag {color: rgba(41, 170, 226, 0.8);}
+
+.cm-header, .cm-strong {font-weight: bold; color: #29AAE2;}
+.cm-em {font-style: italic; color: #29AAE2;}
+
+.cm-s-default .cm-link {color: #29AAE2;}
+.cm-s-default .cm-string {color: #bbbbbb;}
+.cm-s-default .cm-attribute {color: rgba(41, 170, 226, 0.8);}
+
+
+.CodeMirror-selected { background: rgba(41, 170, 226, 0.2); }
+.CodeMirror-focused .CodeMirror-selected { background: rgba(41, 170, 226, 0.2); }

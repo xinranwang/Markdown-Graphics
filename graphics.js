@@ -13,54 +13,80 @@ var dragRect;
 var dragCircle;
 var dragLine;
 
+var myCodeMirror;
+var cursorPos;
+
 $(function () {
-
-    // insert button
-    $("body").append('<button id="insert-btn">insert svg</button>');
-
-    // add options
-    d3.select("#insert-btn").on("click", function () {
-        $("body").append('<button id="view-code">view code</button>');
-        
-        d3.select("body").append("form")
-            .attr("id", "select-class");
-        d3.select("body").append("form")
-            .attr("id", "select-shape");
-
-        $("#select-class").append('<input type="radio" name="gclass" value="regular" checked>regular<input type="radio" name="gclass" value="emphasis">emphasis')
-            .change(setClass);
-
-        $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle">select<input type="radio" name="shape" value="rect" checked>rect<input type="radio" name="shape" value="circle">circle<input type="radio" name="shape" value="line">line')
-            .change(setShape);
-
-        
-        
-        svgContainer = d3.select("body").append("svg");
-
-        var grid = d3.select("body").append("div")
-            .attr("id", "grid");
-
-        $("#insert-btn").remove();
-        
-        
-        
-        $("#view-code").click(function() {
-            var svgDom = $("svg")[0].outerHTML;
-            //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
-            alert(svgDom);
-        });
-        
-
-        setClass();
-        setShape();
-
-        d3.select("body").on("keydown", key);
-
-        setupDrags();
-
+    myCodeMirror = CodeMirror(document.body, {
+        mode: "markdown",
+        autoCloseTags: true
     });
 
+//    // insert button
+//    $("body").append('<button id="insert-btn">insert svg</button>');
+//
+//    // add options
+//    d3.select("#insert-btn").on("click", setupCanvas);
+
 });
+
+function setupCanvas() {
+    
+    $("body").append('<button id="view-code">view code</button>');
+    $("body").append('<button id="finish-drawing">done</button>');
+
+    d3.select("body").append("div")
+        .attr("id", "control-panel");
+    d3.select("#control-panel").append("form")
+        .attr("id", "select-class");
+    d3.select("#control-panel").append("form")
+        .attr("id", "select-shape");
+
+    $("#select-class").append('<input type="radio" name="gclass" value="regular" checked>regular<input type="radio" name="gclass" value="emphasis">emphasis')
+        .change(setClass);
+
+    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle">select<input type="radio" name="shape" value="rect" checked>rect<input type="radio" name="shape" value="circle">circle<input type="radio" name="shape" value="line">line')
+        .change(setShape);
+
+
+
+    svgContainer = d3.select("body").append("svg");
+
+    var grid = d3.select("body").append("div")
+        .attr("id", "grid");
+
+    $("#insert-btn").remove();
+
+
+
+    $("#view-code").click(function () {
+        var svgDom = $("svg")[0].outerHTML;
+        //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
+        alert(svgDom);
+    });
+    
+    $("#finish-drawing").click(finishCanvas);
+
+
+    setClass();
+    setShape();
+
+    d3.select("body").on("keydown", key);
+
+    setupDrags();
+}
+
+function finishCanvas() {
+    cursorPos = myCodeMirror.getCursor();
+    $("#control-panel").remove();
+    $("#grid").remove();
+    $("#view-code").remove();
+    $("#finish-drawing").remove();
+    var svgDom = $("svg")[0].innerHTML;
+    myCodeMirror.replaceRange(svgDom, cursorPos);
+    cursorPos = null;
+    $("svg").remove();
+}
 
 // Prevent the backspace key from navigating back.
 $(document).unbind('keydown').bind('keydown', function (event) {
@@ -191,5 +217,3 @@ function snapMouse(mouse) {
     //console.log(snap);
     return snap;
 }
-
-

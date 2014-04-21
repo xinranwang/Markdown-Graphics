@@ -1,5 +1,6 @@
 body {
 /*    background-color: #F4F4F0;*/
+    font-family: monospace;
 }
 
 .emphasis {
@@ -31,6 +32,7 @@ svg > *:hover {
     cursor: move;
 }
 
+/*
 .control {
     fill-opacity: 0;
     stroke-opacity: 0;
@@ -41,12 +43,104 @@ svg > *:hover {
     stroke: #000000;
     stroke-width: 1;
 }
+*/
 
 #ns-resize       { cursor: ns-resize; }
 #ew-resize       { cursor: ew-resize; }
 #nesw-resize     { cursor: nesw-resize; }
 #nwse-resize     { cursor: nwse-resize; }
 
+button {
+    background-color: transparent;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #bbbbbb;
+    color: rgba(0, 0, 0, 0.5);
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 16px;
+    margin:5px;
+}
+
+button:hover {
+    border-color: #29AAE2;
+    color: #29AAE2;
+}
+
+input[type=radio] {
+    display:none; 
+    margin:10px;
+}
+
+
+
+input[type=radio] + label {
+    display:inline-block;
+    margin:2px;
+    width:40px;
+    height:40px;
+/*    padding: 2px 8px;*/
+    background-color: transparent;
+    border-color: #bbbbbb;
+    border-style: solid;
+    border-width: 3px;
+    
+    color: rgba(0, 0, 0, 0.5);
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+input[type=radio]:checked + label { 
+/*
+    background-image: none;
+    background-color:#d0d0d0;
+*/  
+    border-color: #29AAE2;
+    color: #29AAE2;
+}
+
+#regular-gclass + label {  
+    background-image:url(/assets/regular.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 32px;
+}
+
+#emphasis-gclass + label {  
+    background-image:url(/assets/highlight.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: 32px;
+}
+
+#select-toggle + label {
+    background-image:url(/assets/select.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: 32px;
+}
+
+#draw-rect + label {
+    background-image:url(/assets/rect.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: 32px;
+}
+
+#draw-circle + label {
+    background-image:url(/assets/circle.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: 32px;    
+}
+
+#draw-line + label {
+    background-image:url(/assets/line.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: 32px; 
+}
 
 #grid {
     background-size: 30px 30px;
@@ -98,3 +192,7 @@ svg {
 
 .CodeMirror-selected { background: rgba(41, 170, 226, 0.2); }
 .CodeMirror-focused .CodeMirror-selected { background: rgba(41, 170, 226, 0.2); }
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 2px solid #29AAE2;
+}

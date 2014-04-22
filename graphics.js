@@ -20,7 +20,8 @@ $(function () {
     myCodeMirror = CodeMirror(document.body, {
         mode: "markdown",
         autoCloseTags: true,
-        autofocus: true
+        autofocus: true,
+        lineWrapping: true
     });
 
 //    // insert button
@@ -80,6 +81,8 @@ function setupCanvas() {
     d3.select("body").on("keydown", key);
 
     setupDrags();
+//    myCodeMirror.readOnly = "nocursor";
+    myCodeMirror.setOption("readOnly", "nocursor");
 }
 
 function finishCanvas() {
@@ -92,6 +95,7 @@ function finishCanvas() {
     myCodeMirror.replaceRange(svgDom, cursorPos);
     cursorPos = null;
     $("svg").remove();
+    myCodeMirror.setOption("readOnly", false);
 }
 
 // Prevent the backspace key from navigating back.

@@ -101,42 +101,42 @@ input[type=radio]:checked + label {
 }
 
 #regular-gclass + label {  
-    background-image:url(/assets/regular.png);
+    background-image:url(assets/regular.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: 32px;
 }
 
 #emphasis-gclass + label {  
-    background-image:url(/assets/highlight.png);
+    background-image:url(assets/highlight.png);
     background-repeat: no-repeat;
     background-position:center;
     background-size: 32px;
 }
 
 #select-toggle + label {
-    background-image:url(/assets/select.png);
+    background-image:url(assets/select.png);
     background-repeat: no-repeat;
     background-position:center;
     background-size: 32px;
 }
 
 #draw-rect + label {
-    background-image:url(/assets/rect.png);
+    background-image:url(assets/rect.png);
     background-repeat: no-repeat;
     background-position:center;
     background-size: 32px;
 }
 
 #draw-circle + label {
-    background-image:url(/assets/circle.png);
+    background-image:url(assets/circle.png);
     background-repeat: no-repeat;
     background-position:center;
     background-size: 32px;    
 }
 
 #draw-line + label {
-    background-image:url(/assets/line.png);
+    background-image:url(assets/line.png);
     background-repeat: no-repeat;
     background-position:center;
     background-size: 32px; 

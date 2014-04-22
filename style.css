@@ -1,3 +1,9 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 body {
 /*    background-color: #F4F4F0;*/
     font-family: monospace;
@@ -104,59 +110,69 @@ input[type=radio]:checked + label {
     background-image:url(assets/regular.png);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 32px;
+    background-size: 28px;
 }
 
 #emphasis-gclass + label {  
     background-image:url(assets/highlight.png);
     background-repeat: no-repeat;
     background-position:center;
-    background-size: 32px;
+    background-size: 28px;
 }
 
 #select-toggle + label {
     background-image:url(assets/select.png);
     background-repeat: no-repeat;
     background-position:center;
-    background-size: 32px;
+    background-size: 28px;
 }
 
 #draw-rect + label {
     background-image:url(assets/rect.png);
     background-repeat: no-repeat;
     background-position:center;
-    background-size: 32px;
+    background-size: 28px;
 }
 
 #draw-circle + label {
     background-image:url(assets/circle.png);
     background-repeat: no-repeat;
     background-position:center;
-    background-size: 32px;    
+    background-size: 28px;    
 }
 
 #draw-line + label {
     background-image:url(assets/line.png);
     background-repeat: no-repeat;
     background-position:center;
-    background-size: 32px; 
+    background-size: 28px; 
+}
+
+#canvas {
+    position: relative;
 }
 
 #grid {
     background-size: 30px 30px;
     background-image:repeating-linear-gradient(0deg, #000, #000 1px, transparent 1px, transparent 30px), repeating-linear-gradient(-90deg, #000, #000 1px, transparent 1px, transparent 30px);
+/*
+    height:600px;
+    width:810px;
+*/
+/*
     height:100%;
     width:100%;
+*/
     opacity:0.10;
     position:absolute;
-/*    top:0;*/
+    top:0;
     left:0;
-    z-index:-1;
+    z-index:-1;    
 }
 
 svg {
     position:absolute;
-/*    top:0;*/
+    top:0;
     left:0;
     z-index:0;
 }

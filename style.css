@@ -95,6 +95,7 @@ input[type=radio] + label {
     font-family: monospace;
     font-weight: bold;
     font-size: 16px;
+    
 }
 
 input[type=radio]:checked + label { 
@@ -150,6 +151,8 @@ input[type=radio]:checked + label {
 
 #canvas {
     position: relative;
+    width: 600px;
+    height: 600px;
 }
 
 #grid {
@@ -168,6 +171,28 @@ input[type=radio]:checked + label {
     top:0;
     left:0;
     z-index:-1;    
+}
+
+#control-panel {
+    position: absolute;
+    margin-left: 650px;
+    width: 80px;
+    height: 600px;
+}
+
+#select-shape {
+    margin-top: 20px;
+}
+
+#finish-drawing {
+    position: absolute;
+    bottom: 0;
+}
+
+#view-code {
+    position: absolute;
+    right: 0;
+    z-index: 1;
 }
 
 svg {

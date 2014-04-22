@@ -1,7 +1,7 @@
 var GRIDSIZE = 30;
 var SNAPTHRESHOLD = 10;
 
-var CANVASWIDTH = 800;
+var CANVASWIDTH = 600;
 var CANVASHEIGHT = 600;
 
 var startPos = [0, 0];
@@ -40,9 +40,6 @@ function setupCanvas() {
     var canvasContainer = d3.select("body").append("div")
         .attr("id", "canvasContainer");
     
-    $("#canvasContainer").append('<button id="view-code">CODE</button>');
-    $("#canvasContainer").append('<button id="finish-drawing">DONE</button>');
-
     canvasContainer.append("div")
         .attr("id", "control-panel");
     d3.select("#control-panel").append("form")
@@ -60,9 +57,13 @@ function setupCanvas() {
 //        .change(setShape);
     $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label>')
         .change(setShape);
-
+    
+    $("#control-panel").append('<button id="finish-drawing">DONE</button>');
 
     var canvas = canvasContainer.append("div").attr("id", "canvas");
+    
+    $("#canvas").append('<button id="view-code">CODE</button>');
+
     
     svgContainer = canvas.append("svg")
         .attr("width", CANVASWIDTH)
@@ -73,10 +74,7 @@ function setupCanvas() {
     
     $("#grid").width(CANVASWIDTH).height(CANVASHEIGHT);
         
-
     $("#insert-btn").remove();
-
-
 
     $("#view-code").click(function () {
         var svgDom = $("svg")[0].outerHTML;

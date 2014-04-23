@@ -4,6 +4,8 @@ var SNAPTHRESHOLD = 10;
 var CANVASWIDTH = 600;
 var CANVASHEIGHT = 600;
 
+var CANVASMARGIN = 30;
+
 var startPos = [0, 0];
 var endPos = [0, 0];
 var pmousePos = [0, 0];
@@ -19,21 +21,31 @@ var dragLine;
 var myCodeMirror;
 var cursorPos;
 
+var cmList = [];
+var svgList = [];
+var cmIndex = 0;
+
 $(function () {
-    myCodeMirror = CodeMirror(document.body, {
+    myCodeMirror = createEditor();
+});
+
+function createEditor() {
+    var cm = CodeMirror(document.body, {
+
         mode: "markdown",
         autoCloseTags: true,
         autofocus: true,
         lineWrapping: true
     });
+    
+    cmList.push(cm);
+    cmIndex = cmList.length - 1;
+    return cmList[cmIndex];
+}
 
-//    // insert button
-//    $("body").append('<button id="insert-btn">insert svg</button>');
-//
-//    // add options
-//    d3.select("#insert-btn").on("click", setupCanvas);
-
-});
+//function createSVG() {
+//    var svgContainer = 
+//}
 
 function setupCanvas() {
     
@@ -46,15 +58,10 @@ function setupCanvas() {
         .attr("id", "select-class");
     d3.select("#control-panel").append("form")
         .attr("id", "select-shape");
-
-//    $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass">regular</label><input type="radio" id="emphasis-gclass" name="gclass" value="emphasis"><label for="emphasis-gclass">emphasis</label>')
-//        .change(setClass);
     
     $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass"></label><input type="radio" id="emphasis-gclass" name="gclass" value="emphasis"><label for="emphasis-gclass"></label>')
         .change(setClass);
 
-//    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle">select</label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect">rect</label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle">circle</label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line">line</label>')
-//        .change(setShape);
     $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label>')
         .change(setShape);
     
@@ -67,7 +74,8 @@ function setupCanvas() {
     
     svgContainer = canvas.append("svg")
         .attr("width", CANVASWIDTH)
-        .attr("height", CANVASHEIGHT);
+        .attr("height", CANVASHEIGHT)
+        .attr("id", "active-svg");
 
     var grid = canvas.append("div")
         .attr("id", "grid");
@@ -91,21 +99,25 @@ function setupCanvas() {
     d3.select("body").on("keydown", key);
 
     setupDrags();
-//    myCodeMirror.readOnly = "nocursor";
     myCodeMirror.setOption("readOnly", "nocursor");
 }
 
 function finishCanvas() {
     cursorPos = myCodeMirror.getCursor();
-    $("#control-panel").remove();
-    $("#grid").remove();
-    $("#view-code").remove();
-    $("#finish-drawing").remove();
+    
     var svgDom = $("svg")[0].innerHTML;
     myCodeMirror.replaceRange(svgDom, cursorPos);
     cursorPos = null;
-    $("svg").remove();
+    
+    var b = new getSVGBoundingBox();
+    svgContainer.attr("width", b.endX + CANVASMARGIN)
+        .attr("height", b.endY + CANVASMARGIN);
+    
+    //$("svg").remove();
+    if(svgDom != "") $( "svg" ).clone().appendTo( "body" ).removeAttr("id");
+    $("#canvasContainer").remove();
     myCodeMirror.setOption("readOnly", false);
+    if(svgDom != "") myCodeMirror = createEditor();
 }
 
 // Prevent the backspace key from navigating back.

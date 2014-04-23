@@ -6,7 +6,7 @@ function rectSetup() {
         .attr("y", startPos[1])
         .attr("class", gclass)
         .attr("id", "drawing");
-        //.call(dragRect);
+    //.call(dragRect);
     svgContainer.on("mousemove", rectDraw);
 }
 
@@ -108,4 +108,62 @@ function getLineData(selection) {
     this.y1 = parseInt(selection.attr("y1"));
     this.x2 = parseInt(selection.attr("x2"));
     this.y2 = parseInt(selection.attr("y2"));
+}
+
+function getSVGBoundingBox() {
+    var elements = d3.selectAll("#active-svg > *")[0];
+    this.startX = CANVASWIDTH;
+    this.startY = CANVASHEIGHT;
+    this.endX = 0;
+    this.endY = 0;
+
+    for (var i = 0; i < elements.length; i++) {
+        var s = d3.select(elements[i]);
+    //for(var s in elements) {
+        console.log(s);
+        var d;
+        
+        switch (elements[i].tagName) {
+        case "rect":
+            d = new getRectData(s);
+                console.log(d);
+            if(d.x < this.startX) this.startX = d.x;
+            if(d.y < this.startY) this.startY = d.y;
+            if(d.x + d.width > this.endX) this.endX = d.x + d.width;
+            if(d.y + d.height > this.endY) this.endY = d.y + d.height;
+            break;
+        case "circle":
+            d = new getCircleData(s);
+            if(d.cx - d.r < this.startX) this.startX = d.cx - d.r;
+            if(d.cy - d.r < this.startY) this.startY = d.cy - d.r;
+            if(d.cx + d.r > this.endX) this.startX = d.cx + d.r;
+            if(d.cy + d.r > this.endY) this.startY = d.cy + d.r;
+            break;
+        case "line":
+            d = new getLineData(s);
+            var lstartX, lstartY, lendX, lendY;
+            if(d.x1 < d.x2) {
+                lstartX = d.x1;
+                lendX = d.x2;
+            } else {
+                lstartX = d.x2;
+                lendX = d.x1;
+            }
+                
+            if(d.y1 < d.y2) {
+                lstartY = d.y1;
+                lendY = d.y2;
+            } else {
+                lstartY = d.y2;
+                lendY = d.y1;
+            }
+                
+            if(lstartX < this.startX) this.startX = lstartX;
+            if(lstartY < this.startY) this.startY = lstartY;
+            if(lendX > this.endX) this.endX = lendX;
+            if(lendY > this.endY) this.endY = lendY;
+
+            break;
+        }
+    }
 }

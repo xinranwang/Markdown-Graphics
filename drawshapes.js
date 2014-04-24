@@ -134,8 +134,8 @@ function getSVGBoundingBox() {
             d = new getCircleData(s);
             if(d.cx - d.r < this.startX) this.startX = d.cx - d.r;
             if(d.cy - d.r < this.startY) this.startY = d.cy - d.r;
-            if(d.cx + d.r > this.endX) this.startX = d.cx + d.r;
-            if(d.cy + d.r > this.endY) this.startY = d.cy + d.r;
+            if(d.cx + d.r > this.endX) this.endX = d.cx + d.r;
+            if(d.cy + d.r > this.endY) this.endY = d.cy + d.r;
             break;
         case "line":
             d = new getLineData(s);

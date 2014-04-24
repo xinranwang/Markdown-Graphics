@@ -293,7 +293,7 @@ function getContent() {
     for (var i = 0; i < cmList.length; i++) {
         contentStr += cmList[i].getValue();
         if (!svgCopied && $("svg").length == 1) {
-            contentStr += $("svg")[0].outerHTML + "\n";
+            contentStr += "\n" + $("svg")[0].outerHTML + "\n\n";
             svgCopied = true;
         }
     }

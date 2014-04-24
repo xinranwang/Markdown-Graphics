@@ -85,8 +85,8 @@ function lineDraw() {
 
 function drawEnded() {
     d3.select("#drawing").attr("id", null);
-    $("#select-toggle").prop("checked", true);
-    select();
+//    $("#select-toggle").prop("checked", true);
+//    select();
 }
 
 // get shape data
@@ -119,14 +119,12 @@ function getSVGBoundingBox() {
 
     for (var i = 0; i < elements.length; i++) {
         var s = d3.select(elements[i]);
-    //for(var s in elements) {
-        console.log(s);
+
         var d;
         
         switch (elements[i].tagName) {
         case "rect":
             d = new getRectData(s);
-                console.log(d);
             if(d.x < this.startX) this.startX = d.x;
             if(d.y < this.startY) this.startY = d.y;
             if(d.x + d.width > this.endX) this.endX = d.x + d.width;

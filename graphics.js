@@ -27,7 +27,32 @@ var cmIndex = 0;
 
 $(function () {
     myCodeMirror = createEditor();
+    $("body").append('<button id="copy-to-clipboard" title="Click to copy.">COPY TO CLIPBOARD</button>');
+    //    $("#copy-to-clipboard").click(function() {
+    //        alert(getContent());
+    //    });
+
+    var client = new ZeroClipboard($("#copy-to-clipboard"));
+
+
+    client.on("copy", function (event) {
+        var content = getContent();
+        var clipboard = event.clipboardData;
+        clipboard.setData("text/plain", content);
+        //        clipboard.setData("text/html", "<b>Copy me!</b>");
+        //        clipboard.setData("application/rtf", "{\\rtf1\\ansi\n{\\b Copy me!}}");
+        //#hclipboard.setData("text/x-markdown", content);
+    });
+
+    client.on("aftercopy", function (event) {
+        // `this` === `client`
+        // `event.target` === the element that was clicked
+        //event.target.style.display = "none";
+        alert("Copied text to clipboard: " + event.data["text/plain"]);
+    });
 });
+
+
 
 function createEditor() {
     var cm = CodeMirror(document.body, {
@@ -37,7 +62,7 @@ function createEditor() {
         autofocus: true,
         lineWrapping: true
     });
-    
+
     cmList.push(cm);
     cmIndex = cmList.length - 1;
     return cmList[cmIndex];
@@ -48,30 +73,30 @@ function createEditor() {
 //}
 
 function setupCanvas() {
-    
+
     var canvasContainer = d3.select("body").append("div")
         .attr("id", "canvasContainer");
-    
+
     canvasContainer.append("div")
         .attr("id", "control-panel");
     d3.select("#control-panel").append("form")
         .attr("id", "select-class");
     d3.select("#control-panel").append("form")
         .attr("id", "select-shape");
-    
+
     $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass"></label><input type="radio" id="emphasis-gclass" name="gclass" value="emphasis"><label for="emphasis-gclass"></label>')
         .change(setClass);
 
     $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label>')
         .change(setShape);
-    
+
     $("#control-panel").append('<button id="finish-drawing">DONE</button>');
 
     var canvas = canvasContainer.append("div").attr("id", "canvas");
-    
+
     $("#canvas").append('<button id="view-code">CODE</button>');
 
-    
+
     svgContainer = canvas.append("svg")
         .attr("width", CANVASWIDTH)
         .attr("height", CANVASHEIGHT)
@@ -79,9 +104,9 @@ function setupCanvas() {
 
     var grid = canvas.append("div")
         .attr("id", "grid");
-    
+
     $("#grid").width(CANVASWIDTH).height(CANVASHEIGHT);
-        
+
     $("#insert-btn").remove();
 
     $("#view-code").click(function () {
@@ -89,7 +114,7 @@ function setupCanvas() {
         //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
         alert(svgDom);
     });
-    
+
     $("#finish-drawing").click(finishCanvas);
 
 
@@ -104,20 +129,32 @@ function setupCanvas() {
 
 function finishCanvas() {
     cursorPos = myCodeMirror.getCursor();
-    
+
     var svgDom = $("svg")[0].innerHTML;
-    myCodeMirror.replaceRange(svgDom, cursorPos);
+    //myCodeMirror.replaceRange(svgDom, cursorPos);
+
+    // delete svg text
+    var tagStartPos = {
+        line: cursorPos.line,
+        ch: cursorPos.ch - 5
+    };
+    var tagEndPos = {
+        line: cursorPos.line,
+        ch: cursorPos.ch + 6
+    };
+
+    myCodeMirror.replaceRange("", tagStartPos, tagEndPos);
     cursorPos = null;
-    
+
     var b = new getSVGBoundingBox();
-    svgContainer.attr("width", b.endX + CANVASMARGIN)
-        .attr("height", b.endY + CANVASMARGIN);
-    
+    svgContainer //.attr("width", b.endX + CANVASMARGIN)
+    .attr("height", b.endY + CANVASMARGIN);
+
     //$("svg").remove();
-    if(svgDom != "") $( "svg" ).clone().appendTo( "body" ).removeAttr("id");
+    if (svgDom != "") $("svg").clone().appendTo("body").removeAttr("id");
     $("#canvasContainer").remove();
     myCodeMirror.setOption("readOnly", false);
-    if(svgDom != "") myCodeMirror = createEditor();
+    if (svgDom != "") myCodeMirror = createEditor();
 }
 
 // Prevent the backspace key from navigating back.
@@ -248,4 +285,17 @@ function snapMouse(mouse) {
     }
     //console.log(snap);
     return snap;
+}
+
+function getContent() {
+    var contentStr = "";
+    var svgCopied = false;
+    for (var i = 0; i < cmList.length; i++) {
+        contentStr += cmList[i].getValue();
+        if (!svgCopied && $("svg").length == 1) {
+            contentStr += $("svg")[0].outerHTML + "\n";
+            svgCopied = true;
+        }
+    }
+    return contentStr;
 }

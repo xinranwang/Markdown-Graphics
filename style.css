@@ -59,7 +59,7 @@ svg {
 #nwse-resize     { cursor: nwse-resize; }
 
 button {
-    background-color: transparent;
+    background-color: white;
     border-style: solid;
     border-width: 3px;
     border-color: #bbbbbb;
@@ -73,6 +73,14 @@ button {
 button:hover {
     border-color: #29AAE2;
     color: #29AAE2;
+}
+
+#copy-to-clipboard {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 20px;
+    z-index: 2;
 }
 
 input[type=radio] {

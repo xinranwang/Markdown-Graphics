@@ -68,9 +68,6 @@ function createEditor() {
     return cmList[cmIndex];
 }
 
-//function createSVG() {
-//    var svgContainer = 
-//}
 
 function setupCanvas() {
 
@@ -146,9 +143,10 @@ function finishCanvas() {
     myCodeMirror.replaceRange("", tagStartPos, tagEndPos);
     cursorPos = null;
 
-    var b = new getSVGBoundingBox();
-    svgContainer //.attr("width", b.endX + CANVASMARGIN)
-    .attr("height", b.endY + CANVASMARGIN);
+    trimCanvas();
+    //    var b = new getSVGBoundingBox();
+    //    svgContainer //.attr("width", b.endX + CANVASMARGIN)
+    //    .attr("height", b.endY + CANVASMARGIN);
 
     //$("svg").remove();
     if (svgDom != "") $("svg").clone().appendTo("body").removeAttr("id");
@@ -298,4 +296,40 @@ function getContent() {
         }
     }
     return contentStr;
+}
+
+function trimCanvas() {
+    var b = new getSVGBoundingBox();
+    var elements = d3.selectAll("#active-svg > *")[0];
+
+    for (var i = 0; i < elements.length; i++) {
+        var s = d3.select(elements[i]);
+
+        var d;
+
+        switch (elements[i].tagName) {
+        case "rect":
+            d = new getRectData(s);
+            s.attr("x", d.x - b.startX + CANVASMARGIN)
+                .attr("y", d.y - b.startY + CANVASMARGIN);
+
+            break;
+        case "circle":
+            d = new getCircleData(s);
+            s.attr("cx", d.cx - b.startX + CANVASMARGIN)
+                .attr("cy", d.cy - b.startY + CANVASMARGIN);
+            break;
+        case "line":
+            d = new getLineData(s);
+            s.attr("x1", d.x1 - b.startX + CANVASMARGIN)
+                .attr("y1", d.y1 - b.startY + CANVASMARGIN)
+                .attr("x2", d.x2 - b.startX + CANVASMARGIN)
+                .attr("y2", d.y2 - b.startY + CANVASMARGIN);
+            break;
+        }
+
+
+        svgContainer.attr("width", b.endX - b.startX + CANVASMARGIN * 2)
+            .attr("height", b.endY - b.startY + CANVASMARGIN * 2);
+    }
 }

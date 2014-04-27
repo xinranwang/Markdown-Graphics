@@ -26,13 +26,15 @@ var svgList = [];
 var cmIndex = 0;
 
 $(function () {
-    myCodeMirror = createEditor();
+    
     $("body").append('<button id="copy-to-clipboard" title="Click to copy.">COPY TO CLIPBOARD</button>');
     //    $("#copy-to-clipboard").click(function() {
     //        alert(getContent());
     //    });
 
     var client = new ZeroClipboard($("#copy-to-clipboard"));
+    
+    myCodeMirror = createEditor();
 
 
     client.on("copy", function (event) {
@@ -68,12 +70,8 @@ function createEditor() {
     return cmList[cmIndex];
 }
 
-
-function setupCanvas() {
-
-    var canvasContainer = d3.select("body").append("div")
-        .attr("id", "canvasContainer");
-
+function setupControls() {
+    var canvasContainer = d3.select("#canvasContainer"); 
     canvasContainer.append("div")
         .attr("id", "control-panel");
     d3.select("#control-panel").append("form")
@@ -92,42 +90,68 @@ function setupCanvas() {
     var canvas = canvasContainer.append("div").attr("id", "canvas");
 
     $("#canvas").append('<button id="view-code">CODE</button>');
-
-
-    svgContainer = canvas.append("svg")
-        .attr("width", CANVASWIDTH)
-        .attr("height", CANVASHEIGHT)
-        .attr("id", "active-svg");
-
     var grid = canvas.append("div")
         .attr("id", "grid");
 
     $("#grid").width(CANVASWIDTH).height(CANVASHEIGHT);
-
-    $("#insert-btn").remove();
-
     $("#view-code").click(function () {
         var svgDom = $("svg")[0].outerHTML;
         //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
         alert(svgDom);
     });
+    
+    d3.select("body").on("keydown", key);
+}
 
+
+function setupCanvas() {
+
+    var canvasContainer = d3.select("body").append("div")
+        .attr("id", "canvasContainer");
+
+    setupControls();
     $("#finish-drawing").click(finishCanvas);
 
+    svgContainer = d3.select("#canvas").append("svg")
+        .attr("width", CANVASWIDTH)
+        .attr("height", CANVASHEIGHT)
+        .attr("id", "active-svg");
 
     setClass();
     setShape();
-
-    d3.select("body").on("keydown", key);
-
     setupDrags();
+    myCodeMirror.setOption("readOnly", "nocursor");
+}
+
+function editSVG() {
+    //get previous dom
+    var pDom = $(this).prev(".CodeMirror");//All('.CodeMirror').first();
+    $(this).attr("id", "active-svg")
+        .off('click');
+    //console.log(d.prop("class"));
+    pDom.after("<div id='canvasContainer'></div>");
+    canvasContainer = d3.select("#canvasContainer");
+    setupControls();
+    $("#finish-drawing").click(finishEditingSVG);
+    centerGraph();
+    
+    $("#active-svg").appendTo($("#canvas"));
+    
+    setClass();
+    setShape();
+    setupDrags();
+    
+    // select mode
+    $("#select-toggle").prop("checked", true);
+    select();
+    
     myCodeMirror.setOption("readOnly", "nocursor");
 }
 
 function finishCanvas() {
     cursorPos = myCodeMirror.getCursor();
 
-    var svgDom = $("svg")[0].innerHTML;
+    var svgDom = $("#active-svg")[0].innerHTML;
     //myCodeMirror.replaceRange(svgDom, cursorPos);
 
     // delete svg text
@@ -143,16 +167,23 @@ function finishCanvas() {
     myCodeMirror.replaceRange("", tagStartPos, tagEndPos);
     cursorPos = null;
 
-    trimCanvas();
-    //    var b = new getSVGBoundingBox();
-    //    svgContainer //.attr("width", b.endX + CANVASMARGIN)
-    //    .attr("height", b.endY + CANVASMARGIN);
+    finishEditingSVG();
+    
+    if (svgDom != "") myCodeMirror = createEditor();
+}
 
-    //$("svg").remove();
-    if (svgDom != "") $("svg").clone().appendTo("body").removeAttr("id");
+function finishEditingSVG() {
+    trimCanvas();
+    if ($("#active-svg")[0].innerHTML != "") {
+        //$("#active-svg").clone().appendTo("body").removeAttr("id");
+        $("#canvasContainer").after($("#active-svg"));
+        $("#active-svg").removeAttr("id")
+            .click(editSVG);
+    }
     $("#canvasContainer").remove();
     myCodeMirror.setOption("readOnly", false);
-    if (svgDom != "") myCodeMirror = createEditor();
+    disableAllEvent(svgContainer);
+    disableSelection();
 }
 
 // Prevent the backspace key from navigating back.
@@ -327,9 +358,49 @@ function trimCanvas() {
                 .attr("y2", d.y2 - b.startY + CANVASMARGIN);
             break;
         }
-
-
-        svgContainer.attr("width", b.endX - b.startX + CANVASMARGIN * 2)
-            .attr("height", b.endY - b.startY + CANVASMARGIN * 2);
     }
+    
+    svgContainer.attr("width", b.endX - b.startX + CANVASMARGIN * 2)
+            .attr("height", b.endY - b.startY + CANVASMARGIN * 2);
 }
+
+function centerGraph() {
+    var svgContainer = d3.select("#active-svg");
+    var w = parseInt(svgContainer.attr("width"));
+    var h = parseInt(svgContainer.attr("height"));
+    var elements = d3.selectAll("#active-svg > *")[0];
+    
+    var moveX = (CANVASWIDTH - w)/2;
+    var moveY = (CANVASHEIGHT - h)/2;
+    
+    for (var i = 0; i < elements.length; i++) {
+        var s = d3.select(elements[i]);
+
+        var d;
+
+        switch (elements[i].tagName) {
+        case "rect":
+            d = new getRectData(s);
+            s.attr("x", d.x + moveX)
+                .attr("y", d.y + moveY);
+
+            break;
+        case "circle":
+            d = new getCircleData(s);
+            s.attr("cx", d.cx + moveX)
+                .attr("cy", d.cy + moveY);
+            break;
+        case "line":
+            d = new getLineData(s);
+            s.attr("x1", d.x1 + moveX)
+                .attr("y1", d.y1 + moveY)
+                .attr("x2", d.x2 + moveX)
+                .attr("y2", d.y2 + moveY);
+            break;
+        }
+    }
+    
+    svgContainer.attr("width", CANVASWIDTH)
+        .attr("height", CANVASHEIGHT);
+}
+

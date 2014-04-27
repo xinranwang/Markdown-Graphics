@@ -35,6 +35,7 @@ $(function () {
     var client = new ZeroClipboard($("#copy-to-clipboard"));
     
     myCodeMirror = createEditor();
+    cmList[0].setOption("placeholder", "Start typing here...");
 
 
     client.on("copy", function (event) {

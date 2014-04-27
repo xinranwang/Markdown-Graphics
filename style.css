@@ -7,19 +7,28 @@
 body {
 /*    background-color: #F4F4F0;*/
     font-family: monospace;
+    width: 800px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 50px;
+    padding-bottom: 100px;
 }
 
 svg {
     position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
-.emphasis {
+svg .emphasis {
 /*    fill: #eeeeee;*/
     fill-opacity: 0;
     stroke: #29AAE2;
     stroke-width: 5;
 }
 
-.regular {
+svg .regular {
     fill-opacity: 0;
     stroke: #59595B;
     stroke-width: 3;

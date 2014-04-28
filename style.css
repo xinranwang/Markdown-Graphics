@@ -256,3 +256,5 @@ input[type=radio]:checked + label {
 .CodeMirror div.CodeMirror-cursor {
   border-left: 2px solid #29AAE2;
 }
+
+.CodeMirror pre.CodeMirror-placeholder { color: #ccc; }

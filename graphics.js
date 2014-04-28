@@ -96,7 +96,7 @@ function setupControls() {
 
     $("#grid").width(CANVASWIDTH).height(CANVASHEIGHT);
     $("#view-code").click(function () {
-        var svgDom = $("svg")[0].outerHTML;
+        var svgDom = $("#active-svg")[0].innerHTML;
         //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
         alert(svgDom);
     });

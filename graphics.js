@@ -25,6 +25,8 @@ var cmList = [];
 var svgList = [];
 var cmIndex = 0;
 
+var placeholder = "Start typing here. Type '<svg>' to start drawing.";
+
 $(function () {
     
     $("body").append('<button id="copy-to-clipboard" title="Click to copy.">COPY TO CLIPBOARD</button>');
@@ -35,7 +37,7 @@ $(function () {
     var client = new ZeroClipboard($("#copy-to-clipboard"));
     
     myCodeMirror = createEditor();
-    cmList[0].setOption("placeholder", "Start typing here...");
+    cmList[0].setOption("placeholder", placeholder);
 
 
     client.on("copy", function (event) {

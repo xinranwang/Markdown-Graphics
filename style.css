@@ -241,6 +241,7 @@ input[type=radio]:checked + label {
 .cm-s-default .cm-header {color: #29AAE2;}
 .cm-s-default .cm-builtin {color: #29AAE2;}
 .cm-s-default .cm-tag {color: rgba(41, 170, 226, 0.8);}
+.cm-s-default .cm-quote {color: #29AAE2;}
 
 .cm-header, .cm-strong {font-weight: bold; color: #29AAE2;}
 .cm-em {font-style: italic; color: #29AAE2;}

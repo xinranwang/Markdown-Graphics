@@ -82,7 +82,7 @@ function setupControls() {
     d3.select("#control-panel").append("form")
         .attr("id", "select-shape");
 
-    $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass"></label><input type="radio" id="emphasis-gclass" name="gclass" value="emphasis"><label for="emphasis-gclass"></label>')
+    $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass"></label><input type="radio" id="highlight-gclass" name="gclass" value="highlight"><label for="highlight-gclass"></label>')
         .change(setClass);
 
     $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label>')
@@ -284,13 +284,12 @@ function disableAllEvent(selection) {
 function disableSelection() {
     unselectElement();
     d3.selectAll(".regular").on("click", null);
-    d3.selectAll(".emphasis").on("click", null);
+    d3.selectAll(".highlight").on("click", null);
 }
 
 function enableSelection() {
     d3.selectAll(".regular").on("click", selectElement);
-    d3.selectAll(".emphasis").on("click", selectElement);
-    d3.selectAll(".emphasis").on("click", selectElement);
+    d3.selectAll(".highlight").on("click", selectElement);
 }
 
 function select() {

@@ -21,7 +21,7 @@ svg {
     margin-left: auto;
     margin-right: auto;
 }
-svg .emphasis {
+svg .highlight {
 /*    fill: #eeeeee;*/
     fill-opacity: 0;
     stroke: #29AAE2;
@@ -133,7 +133,7 @@ input[type=radio]:checked + label {
     background-size: 28px;
 }
 
-#emphasis-gclass + label {  
+#highlight-gclass + label {  
     background-image:url(assets/highlight.png);
     background-repeat: no-repeat;
     background-position:center;

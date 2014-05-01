@@ -6,7 +6,7 @@ Currently, off-the-shelf Markdown editors support plain text editing only. Markd
 
 [Demo video](https://vimeo.com/93328576)
 
-## Objective
+## Objectives
 - To simplify the process of making diagrams in a textual context. Or in other words, to kill the following sequence, also the way I attach this image here.
 ![sequenceToKill](http://markdown.graphics/sequence.png)
 - To separate *[form and content](http://en.wikipedia.org/wiki/Form_and_content)* of images, allowing CSS to take over all the styling.  

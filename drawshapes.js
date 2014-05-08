@@ -110,6 +110,11 @@ function getLineData(selection) {
     this.y2 = parseInt(selection.attr("y2"));
 }
 
+function getTextData(selection) {
+    this.x = parseInt(selection.attr("x"));
+    this.y = parseInt(selection.attr("y"));
+}
+
 function getSVGBoundingBox() {
     var elements = d3.selectAll("#active-svg > *")[0];
     this.startX = CANVASWIDTH;

@@ -237,7 +237,7 @@ input[type=radio]:checked + label {
 .cm-s-default .cm-variable {color: rgba(0, 0, 0, 0.8);}
 .cm-s-default .cm-variable-2 {color: rgba(0, 0, 0, 0.8);}
 .cm-s-default .cm-variable-3 {color: rgba(0, 0, 0, 0.8);}
-.cm-s-default .cm-comment {color: rgba(0, 0, 0, 0.8);}
+.cm-s-default .cm-comment {color: #29AAE2;}
 .cm-s-default .cm-header {color: #29AAE2;}
 .cm-s-default .cm-builtin {color: #29AAE2;}
 .cm-s-default .cm-tag {color: rgba(41, 170, 226, 0.8);}

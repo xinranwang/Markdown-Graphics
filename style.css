@@ -34,17 +34,38 @@ svg .regular {
     stroke-width: 3;
 }
 
-#active-svg > *:hover {
-    stroke: #FF0000;
-    stroke-opacity: 0.5;
+.arrow {
+    fill: transparent;
 }
 
-#drawing {
+#regularArrow {
+    stroke: #59595B;
+}
+
+#highlightArrow {
+    stroke: #29AAE2;
+}
+
+.defs {
+    width: 0;
+    height: 0;
+}
+
+svg .line_arrow.regular {
+    marker-end: url(#regularArrow);
+}
+
+svg .line_arrow.highlight {
+    marker-end: url(#highlightArrow);
+}
+
+#active-svg > *:hover {
+    stroke: orange;
     stroke-opacity: 0.5;
 }
 
 #selected {
-    stroke: #FF0000;
+    stroke: orange;
     stroke-opacity: 1;
     cursor: move;
 }
@@ -163,6 +184,13 @@ input[type=radio]:checked + label {
 
 #draw-line + label {
     background-image:url(assets/line.png);
+    background-repeat: no-repeat;
+    background-position:center;
+    background-size: 28px; 
+}
+
+#draw-arrow + label {
+    background-image:url(assets/arrow.png);
     background-repeat: no-repeat;
     background-position:center;
     background-size: 28px; 

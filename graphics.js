@@ -24,7 +24,7 @@ function setupControls() {
     $("#select-class").append('<input type="radio" id="regular-gclass" name="gclass" value="regular" checked><label for="regular-gclass"></label><input type="radio" id="highlight-gclass" name="gclass" value="highlight"><label for="highlight-gclass"></label>')
         .change(setClass);
 
-    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label>')
+    $("#select-shape").append('<input type="radio" name="shape" value="select" id="select-toggle"><label for="select-toggle"></label><input type="radio" id="draw-rect" name="shape" value="rect" checked><label for="draw-rect"></label><input type="radio" id="draw-circle" name="shape" value="circle"><label for="draw-circle"></label><input type="radio" id="draw-line" name="shape" value="line"><label for="draw-line"></label><input type="radio" id="draw-arrow" name="shape" value="arrow"><label for="draw-arrow"></label>')
         .change(setShape);
 
     $("#control-panel").append('<button id="finish-drawing">DONE</button>');
@@ -57,7 +57,8 @@ function setupCanvas() {
     svgContainer = d3.select("#canvas").append("svg")
         .attr("width", CANVASWIDTH)
         .attr("height", CANVASHEIGHT)
-        .attr("id", "active-svg");
+        .attr("id", "active-svg")
+        .attr("class", "diagram");
 
     setClass();
     setShape();
@@ -180,6 +181,10 @@ function setShape() {
         svgContainer.on("mousedown", lineSetup);
         disableSelection();
         break;
+    case "arrow":
+        svgContainer.on("mousedown", arrowSetup);
+        disableSelection();
+        break;
     }
     //return shape;
 }
@@ -264,8 +269,8 @@ function getContent() {
     var svgCopied = false;
     for (var i = 0; i < cmList.length; i++) {
         contentStr += cmList[i].getValue();
-        if (!svgCopied && $("svg").length == 1) {
-            contentStr += "\n" + $("svg")[0].outerHTML + "\n\n";
+        if (!svgCopied && $(".diagram").length == 1) {
+            contentStr += "\n" + $(".defs")[0].outerHTML + $(".diagram")[0].outerHTML + "\n\n";
             svgCopied = true;
         }
     }

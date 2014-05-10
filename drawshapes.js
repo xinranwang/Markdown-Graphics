@@ -1,3 +1,7 @@
+function defArrow() {
+    $("body").append('<svg class="defs"><defs><marker id="regularArrow" class="arrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M 2 1 L 5 3 L 2 5" /></marker><marker id="highlightArrow" class="arrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="6" markerHeight="6" orient="auto"><path d="M 2 1 L 5 3 L 2 5" /></marker></defs></svg>');
+}
+
 function rectSetup() {
     //startPos = d3.mouse(this);
     startPos = snapMouse(d3.mouse(this));
@@ -81,6 +85,20 @@ function lineDraw() {
     endPos = snapMouse(d3.mouse(this));
     $("#drawing").attr("x2", endPos[0])
         .attr("y2", endPos[1]);
+}
+
+function arrowSetup() {
+//    lineSetup();
+//    d3.select("#drawing").attr("class", gclass + " " + "line_arrow");
+    startPos = snapMouse(d3.mouse(this));
+    svgContainer.append("line")
+        .attr("x1", startPos[0])
+        .attr("y1", startPos[1])
+        .attr("x2", startPos[0])
+        .attr("y2", startPos[1])
+        .attr("class", gclass + " " + "line_arrow")
+        .attr("id", "drawing");
+    svgContainer.on("mousemove", lineDraw);
 }
 
 function drawEnded() {

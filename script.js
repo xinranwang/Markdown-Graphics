@@ -30,9 +30,7 @@ var placeholder = "Start typing here. Type '<svg>' to start drawing.";
 $(function () {
     
     $("body").append('<button id="copy-to-clipboard" title="Click to copy.">COPY TO CLIPBOARD</button>');
-    //    $("#copy-to-clipboard").click(function() {
-    //        alert(getContent());
-    //    });
+    defArrow();
 
     var client = new ZeroClipboard($("#copy-to-clipboard"));
     
@@ -44,9 +42,6 @@ $(function () {
         var content = getContent();
         var clipboard = event.clipboardData;
         clipboard.setData("text/plain", content);
-        //        clipboard.setData("text/html", "<b>Copy me!</b>");
-        //        clipboard.setData("application/rtf", "{\\rtf1\\ansi\n{\\b Copy me!}}");
-        //#hclipboard.setData("text/x-markdown", content);
     });
 
     client.on("aftercopy", function (event) {

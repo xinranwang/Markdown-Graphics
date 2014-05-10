@@ -70,7 +70,7 @@ function setupCanvas() {
 
 function editSVG() {
     //get previous dom
-    var pDom = activeSVG.prev(".CodeMirror");//All('.CodeMirror').first();
+    var pDom = activeSVG.prevAll(".CodeMirror");//All('.CodeMirror').first();
     $(this).attr("id", "active-svg")
         .off('click');
     //console.log(d.prop("class"));

@@ -76,6 +76,7 @@ function editSVG() {
     //$("<div id='canvasContainer'></div>").insertAfter(pDom);
     var cc = document.createElement("div");
     cc.setAttribute("id", "canvasContainer");
+    console.log(pDom[0]);
     insertAfter(pDom[0], cc);
     
     canvasContainer = d3.select("#canvasContainer");

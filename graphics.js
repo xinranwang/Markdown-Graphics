@@ -72,7 +72,9 @@ function editSVG() {
     $(this).attr("id", "active-svg")
         .off('click');
     //console.log(d.prop("class"));
-    pDom.after("<div id='canvasContainer'></div>");
+    //pDom.after("<div id='canvasContainer'></div>");
+    $("<div id='canvasContainer'></div>").insertAfter(pDom);
+    
     canvasContainer = d3.select("#canvasContainer");
     setupControls();
     $("#finish-drawing").click(finishEditingSVG);

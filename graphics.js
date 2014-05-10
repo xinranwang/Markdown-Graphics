@@ -73,7 +73,10 @@ function editSVG() {
         .off('click');
     //console.log(d.prop("class"));
     //pDom.after("<div id='canvasContainer'></div>");
-    $("<div id='canvasContainer'></div>").insertAfter(pDom);
+    //$("<div id='canvasContainer'></div>").insertAfter(pDom);
+    var cc = document.createElement("div");
+    cc.setAttribute("id", "canvasContainer");
+    insertAfter(pDom[0], cc);
     
     canvasContainer = d3.select("#canvasContainer");
     setupControls();
@@ -364,3 +367,6 @@ function centerGraph() {
         .attr("height", CANVASHEIGHT);
 }
 
+function insertAfter(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}

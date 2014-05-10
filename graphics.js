@@ -1,3 +1,5 @@
+var activeSVG = null;
+
 function createEditor() {
     var cm = CodeMirror(document.body, {
 
@@ -68,7 +70,7 @@ function setupCanvas() {
 
 function editSVG() {
     //get previous dom
-    var pDom = $(this).prev(".CodeMirror");//All('.CodeMirror').first();
+    var pDom = activeSVG.prev(".CodeMirror");//All('.CodeMirror').first();
     $(this).attr("id", "active-svg")
         .off('click');
     //console.log(d.prop("class"));
@@ -128,7 +130,8 @@ function finishEditingSVG() {
     if ($("#active-svg")[0].innerHTML != "") {
         //$("#active-svg").clone().appendTo("body").removeAttr("id");
         $("#canvasContainer").after($("#active-svg"));
-        $("#active-svg").removeAttr("id")
+        activeSVG = $("#active-svg");
+        activeSVG.removeAttr("id")
             .click(editSVG);
     }
     $("#canvasContainer").remove();

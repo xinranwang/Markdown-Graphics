@@ -30,10 +30,10 @@ Currently, off-the-shelf Markdown editors support plain text editing only. Markd
 
 ## Expected functions
 - More stencils (including but not limited to..)
-    - Labels
-    - Arrows
-    - Freehand Drawings
-    - Polygons
+    - [ ] Labels
+    - [x] Arrows
+    - [ ] Freehand Drawings
+    - [ ] Polygons
 - Vector Editing
 - Importing SVGs
 - More component tags

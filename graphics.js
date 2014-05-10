@@ -1,4 +1,4 @@
-var activeSVG = null;
+//var activeSVG = null;
 
 function createEditor() {
     var cm = CodeMirror(document.body, {
@@ -70,16 +70,16 @@ function setupCanvas() {
 
 function editSVG() {
     //get previous dom
-    var pDom = activeSVG.prevAll(".CodeMirror");//All('.CodeMirror').first();
+    var pDom = $(this).prevAll(".CodeMirror");//All('.CodeMirror').first();
     $(this).attr("id", "active-svg")
         .off('click');
     //console.log(d.prop("class"));
-    //pDom.after("<div id='canvasContainer'></div>");
+    pDom.after("<div id='canvasContainer'></div>");
     //$("<div id='canvasContainer'></div>").insertAfter(pDom);
-    var cc = document.createElement("div");
-    cc.setAttribute("id", "canvasContainer");
-    console.log(pDom[0]);
-    insertAfter(pDom[0], cc);
+//    var cc = document.createElement("div");
+//    cc.setAttribute("id", "canvasContainer");
+//    console.log(pDom[0]);
+//    insertAfter(pDom[0], cc);
     
     canvasContainer = d3.select("#canvasContainer");
     setupControls();
@@ -130,8 +130,10 @@ function finishEditingSVG() {
     if ($("#active-svg")[0].innerHTML != "") {
         //$("#active-svg").clone().appendTo("body").removeAttr("id");
         $("#canvasContainer").after($("#active-svg"));
-        activeSVG = $("#active-svg");
-        activeSVG.removeAttr("id")
+//        activeSVG = $("#active-svg");
+//        activeSVG.removeAttr("id")
+//            .click(editSVG);
+        $("#active-svg").removeAttr("id")
             .click(editSVG);
     }
     $("#canvasContainer").remove();

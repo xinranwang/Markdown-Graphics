@@ -34,6 +34,10 @@ svg .regular {
     stroke-width: 3;
 }
 
+svg text {
+    font-size: 18px
+}
+
 .arrow {
     fill: transparent;
 }
@@ -213,7 +217,7 @@ input[type=radio]:checked + label {
     height:100%;
     width:100%;
 */
-    opacity:0.10;
+    opacity:0.35;
     position:absolute;
     top:0;
     left:0;
@@ -275,7 +279,7 @@ input[type=radio]:checked + label {
 .cm-em {font-style: italic; color: #29AAE2;}
 
 .cm-s-default .cm-link {color: #29AAE2;}
-.cm-s-default .cm-string {color: #bbbbbb;}
+.cm-s-default .cm-string {color: #aaaaaa;}
 .cm-s-default .cm-attribute {color: rgba(41, 170, 226, 0.8);}
 
 
@@ -286,4 +290,4 @@ input[type=radio]:checked + label {
   border-left: 2px solid #29AAE2;
 }
 
-.CodeMirror pre.CodeMirror-placeholder { color: #ccc; }
+.CodeMirror pre.CodeMirror-placeholder { color: #aaaaaa; }

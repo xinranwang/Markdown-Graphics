@@ -1,17 +1,49 @@
-//var activeSVG = null;
-
 function createEditor() {
     var cm = CodeMirror(document.body, {
-
         mode: "markdown",
         autoCloseTags: true,
-//        autofocus: true,
+        autofocus: true,
         lineWrapping: true
     });
 
+    // Editor Instance list
     cmList.push(cm);
     cmIndex = cmList.length - 1;
     return cmList[cmIndex];
+}
+
+function getContent() {
+    var contentStr = "";
+    var svgCopied = false;
+    for (var i = 0; i < cmList.length; i++) {
+        contentStr += cmList[i].getValue();
+        if (!svgCopied && $(".diagram").length == 1) {
+            contentStr += "\n" + $(".defs")[0].outerHTML + $(".diagram")[0].outerHTML + "\n\n";
+            svgCopied = true;
+        }
+    }
+    return contentStr;
+}
+
+/****** NEW CANVAS ******/
+
+function setupCanvas() {
+    var canvasContainer = d3.select("body").append("div")
+        .attr("id", "canvasContainer");
+
+    setupControls();
+    $("#finish-drawing").click(finishCanvas);
+
+    svgContainer = d3.select("#canvas").append("svg")
+        .attr("width", CANVASWIDTH)
+        .attr("height", CANVASHEIGHT)
+        .attr("id", "active-svg")
+        .attr("class", "diagram");
+
+    setClass();
+    setShape();
+    setupDrags();
+    myCodeMirror.setOption("readOnly", "nocursor");
 }
 
 function setupControls() {
@@ -38,48 +70,24 @@ function setupControls() {
         .attr("id", "grid");
 
     $("#grid").width(CANVASWIDTH).height(CANVASHEIGHT);
+    
     $("#view-code").click(function () {
         var svgDom = $("#active-svg")[0].innerHTML;
-        //var svgDom = $('svg').clone().wrap('<svg>').parent().html();
         alert(svgDom);
     });
     
     d3.select("body").on("keydown", key);
 }
 
-
-function setupCanvas() {
-
-    var canvasContainer = d3.select("body").append("div")
-        .attr("id", "canvasContainer");
-
-    setupControls();
-    $("#finish-drawing").click(finishCanvas);
-
-    svgContainer = d3.select("#canvas").append("svg")
-        .attr("width", CANVASWIDTH)
-        .attr("height", CANVASHEIGHT)
-        .attr("id", "active-svg")
-        .attr("class", "diagram");
-
-    setClass();
-    setShape();
-    setupDrags();
-    myCodeMirror.setOption("readOnly", "nocursor");
-}
+/****** CLICK TO EDIT ******/
 
 function editSVG() {
     //get previous dom
-    var pDom = $(this).prevAll(".CodeMirror");//All('.CodeMirror').first();
+    var pDom = $(this).prevAll(".CodeMirror");
     $(this).attr("id", "active-svg")
         .off('click');
-    //console.log(d.prop("class"));
+
     pDom.after("<div id='canvasContainer'></div>");
-    //$("<div id='canvasContainer'></div>").insertAfter(pDom);
-//    var cc = document.createElement("div");
-//    cc.setAttribute("id", "canvasContainer");
-//    console.log(pDom[0]);
-//    insertAfter(pDom[0], cc);
     
     canvasContainer = d3.select("#canvasContainer");
     setupControls();
@@ -98,6 +106,8 @@ function editSVG() {
     
     if(myCodeMirror)myCodeMirror.setOption("readOnly", "nocursor");
 }
+
+/****** FINISH EDITING ******/
 
 function finishCanvas() {
     cursorPos = myCodeMirror.getCursor();
@@ -130,9 +140,7 @@ function finishEditingSVG() {
     if ($("#active-svg")[0].innerHTML != "") {
         //$("#active-svg").clone().appendTo("body").removeAttr("id");
         $("#canvasContainer").after($("#active-svg"));
-//        activeSVG = $("#active-svg");
-//        activeSVG.removeAttr("id")
-//            .click(editSVG);
+
         $("#active-svg").removeAttr("id")
             .click(editSVG);
     }
@@ -141,6 +149,8 @@ function finishEditingSVG() {
     disableAllEvent(svgContainer);
     disableSelection();
 }
+
+/****** KEYS ******/
 
 // Prevent the backspace key from navigating back.
 $(document).unbind('keydown').bind('keydown', function (event) {
@@ -167,10 +177,10 @@ function key() {
     }
 }
 
+/****** SETTINGS ******/
+
 function setClass() {
     gclass = $('input:radio[name=gclass]:checked').val();
-
-    //return gclass;
 }
 
 function setShape() {
@@ -199,6 +209,8 @@ function setShape() {
     }
     //return shape;
 }
+
+/****** SELECTION ******/
 
 function selectElement() {
     unselectElement();
@@ -229,7 +241,6 @@ function selectElement() {
 function unselectElement() {
     d3.select("#selected").attr("id", null)
         .on("mousedown.drag", null);
-    //.call(null);
 }
 
 function disableAllEvent(selection) {
@@ -253,126 +264,4 @@ function select() {
     disableAllEvent(svgContainer);
     svgContainer.on("mousedown", unselectElement);
     enableSelection();
-}
-
-function snapMouse(mouse) {
-    var snap = mouse;
-
-    for (var i = 0; i < window.innerWidth; i += GRIDSIZE) {
-        if (mouse[0] > i - SNAPTHRESHOLD && mouse[0] < i + SNAPTHRESHOLD) {
-            snap[0] = i;
-            break;
-        }
-    }
-
-    for (var j = 0; j < window.innerHeight; j += GRIDSIZE) {
-        if (mouse[1] > j - SNAPTHRESHOLD && mouse[1] < j + SNAPTHRESHOLD) {
-            snap[1] = j;
-            break;
-        }
-    }
-    //console.log(snap);
-    return snap;
-}
-
-function getContent() {
-    var contentStr = "";
-    var svgCopied = false;
-    for (var i = 0; i < cmList.length; i++) {
-        contentStr += cmList[i].getValue();
-        if (!svgCopied && $(".diagram").length == 1) {
-            contentStr += "\n" + $(".defs")[0].outerHTML + $(".diagram")[0].outerHTML + "\n\n";
-            svgCopied = true;
-        }
-    }
-    return contentStr;
-}
-
-function trimCanvas() {
-    var b = new getSVGBoundingBox();
-    var elements = d3.selectAll("#active-svg > *")[0];
-
-    for (var i = 0; i < elements.length; i++) {
-        var s = d3.select(elements[i]);
-
-        var d;
-
-        switch (elements[i].tagName) {
-        case "rect":
-            d = new getRectData(s);
-            s.attr("x", d.x - b.startX + CANVASMARGIN)
-                .attr("y", d.y - b.startY + CANVASMARGIN);
-
-            break;
-        case "circle":
-            d = new getCircleData(s);
-            s.attr("cx", d.cx - b.startX + CANVASMARGIN)
-                .attr("cy", d.cy - b.startY + CANVASMARGIN);
-            break;
-        case "line":
-            d = new getLineData(s);
-            s.attr("x1", d.x1 - b.startX + CANVASMARGIN)
-                .attr("y1", d.y1 - b.startY + CANVASMARGIN)
-                .attr("x2", d.x2 - b.startX + CANVASMARGIN)
-                .attr("y2", d.y2 - b.startY + CANVASMARGIN);
-            break;
-        case "text":
-            d = new getTextData(s);
-            s.attr("x", d.x - b.startX + CANVASMARGIN)
-                .attr("y", d.y - b.startY + CANVASMARGIN);
-            break;
-        }
-    }
-    
-    svgContainer.attr("width", b.endX - b.startX + CANVASMARGIN * 2)
-            .attr("height", b.endY - b.startY + CANVASMARGIN * 2);
-}
-
-function centerGraph() {
-    var svgContainer = d3.select("#active-svg");
-    var w = parseInt(svgContainer.attr("width"));
-    var h = parseInt(svgContainer.attr("height"));
-    var elements = d3.selectAll("#active-svg > *")[0];
-    
-    var moveX = (CANVASWIDTH - w)/2;
-    var moveY = (CANVASHEIGHT - h)/2;
-    
-    for (var i = 0; i < elements.length; i++) {
-        var s = d3.select(elements[i]);
-
-        var d;
-
-        switch (elements[i].tagName) {
-        case "rect":
-            d = new getRectData(s);
-            s.attr("x", d.x + moveX)
-                .attr("y", d.y + moveY);
-
-            break;
-        case "circle":
-            d = new getCircleData(s);
-            s.attr("cx", d.cx + moveX)
-                .attr("cy", d.cy + moveY);
-            break;
-        case "line":
-            d = new getLineData(s);
-            s.attr("x1", d.x1 + moveX)
-                .attr("y1", d.y1 + moveY)
-                .attr("x2", d.x2 + moveX)
-                .attr("y2", d.y2 + moveY);
-            break;
-        case "text":
-            d = new getTextData(s);
-            s.attr("x", d.x + moveX)
-                .attr("y", d.y + moveY);
-            break;
-        }
-    }
-    
-    svgContainer.attr("width", CANVASWIDTH)
-        .attr("height", CANVASHEIGHT);
-}
-
-function insertAfter(referenceNode, newNode) {
-    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }

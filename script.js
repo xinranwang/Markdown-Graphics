@@ -21,6 +21,8 @@ var dragLine;
 var myCodeMirror;
 var cursorPos;
 
+var snapMouseFlag = true;
+
 var cmList = [];
 var svgList = [];
 var cmIndex = 0;
@@ -30,7 +32,7 @@ var placeholder = "Start typing here. Type '<svg>' to start drawing.";
 $(function () {
     
     $("body").append('<button id="copy-to-clipboard" title="Click to copy.">COPY TO CLIPBOARD</button>');
-    defArrow();
+    defArrow(); // append in body
 
     var client = new ZeroClipboard($("#copy-to-clipboard"));
     
